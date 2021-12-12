@@ -1,0 +1,1 @@
+cmd_/home/jose6755/Escritorio/Proyecto1_SOPES/Modulos_C/CPU/CPU.ko := ld -r -m elf_x86_64  --build-id=sha1  -T scripts/module.lds -o /home/jose6755/Escritorio/Proyecto1_SOPES/Modulos_C/CPU/CPU.ko /home/jose6755/Escritorio/Proyecto1_SOPES/Modulos_C/CPU/CPU.o /home/jose6755/Escritorio/Proyecto1_SOPES/Modulos_C/CPU/CPU.mod.o;  true

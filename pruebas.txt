@@ -1,0 +1,92 @@
+static int escribir_archivo(struct seq_file *archivo, void *v)
+{   
+    long rss;
+    long mb;
+    bool esPadre;
+    bool first;
+    bool next = true;
+    bool conhijos;
+    seq_printf(archivo, "{ \"root\": [\n");
+    for_each_process( task ){           
+       
+        first = true;
+        if (task->mm) {
+            rss = get_mm_rss(task->mm) << PAGE_SHIFT;
+            mb = (rss / 1048576)* 100 /6500;
+            if (next){
+                seq_printf(archivo, "{ \"pid\":\"%d\" ,\n \"nombre\": \"%s\" ,\n \"usuario\":\"%d\", \n\"estado\":\"%ld\", \n \"ram\":\"%ld\",\n", 
+                task->pid,task->comm,__kuid_val(task->real_cred->uid), task->state,mb);
+                next = false;
+            }else{
+                seq_printf(archivo, ",{ \"pid\":\"%d\" ,\n \"nombre\": \"%s\" ,\n \"usuario\":\"%d\", \n\"estado\":\"%ld\", \n \"ram\":\"%ld\",\n", 
+                task->pid,task->comm,__kuid_val(task->real_cred->uid), task->state,mb);
+            }
+            
+            esPadre = true;
+        }else{
+            if (next){
+                seq_printf(archivo, "{ \"pid\":\"%d\" ,\n \"nombre\": \"%s\" ,\n \"usuario\":\"%d\", \n\"estado\":\"%ld\" , \n \"ram\":\"0\" ,\n", 
+                task->pid,task->comm,__kuid_val(task->real_cred->uid), task->state);
+                next = false;
+            }else{
+                seq_printf(archivo, ",{ \"pid\":\"%d\",\n \"nombre\": \"%s\" ,\n \"usuario\":\"%d\", \n\"estado\":\"%ld\", \n \"ram\": \"0\" ,\n", 
+                task->pid,task->comm,__kuid_val(task->real_cred->uid), task->state);
+            
+            }
+            esPadre = true;
+        }
+        conhijos = false;
+        seq_printf(archivo," \"hijos\": [");
+        list_for_each(list, &task->children){                       
+            task_child = list_entry( list, struct task_struct, sibling );    
+           if (task_child->mm) {
+                conhijos = true;
+                rss = get_mm_rss(task_child->mm) << PAGE_SHIFT;
+                mb =(rss / 1048576)* 100 /6500;
+
+                if (first){
+                    seq_printf(archivo, "\n\t{ \"pid\":\"%d\" ,\n\t \"nombre\": \"%s\" ,\n\t \"usuario\":\"%d\", \n\t \"estado\":\"%ld\" , \n\t \"ram\":\"%ld\"\n \t}", 
+                    task_child->pid,task_child->comm,__kuid_val(task_child->real_cred->uid), task_child->state,mb);
+                    first = false;
+                }else{
+                    seq_printf(archivo, ",\n\t{ \"pid\":\"%d\",\n\t \"nombre\": \"%s\" ,\n\t \"usuario\":\"%d\", \n\t \"estado\":\"%ld\" , \n\t \"ram\":\"%ld\"\n\t }", 
+                    task_child->pid,task_child->comm,__kuid_val(task_child->real_cred->uid), task_child->state,mb);
+                    
+                }
+                
+            }else{
+                conhijos = true;
+                if (first){
+                    seq_printf(archivo, "\n\t{ \"pid\":\"%d\" ,\n\t \"nombre\": \"%s\" ,\n\t \"usuario\":\"%d\",\n\t \"estado\":\"%ld\" , \n\t \"ram\":\"0\" \n\t}", 
+                    task_child->pid,task_child->comm,__kuid_val(task_child->real_cred->uid), task_child->state);
+                    first = false;
+                }else{
+                    seq_printf(archivo, ",\n\t{ \"pid\":\"%d\",\n\t \"nombre\": \"%s\" ,\n\t \"usuario\":\"%d\",\n\t \"estado\":\"%ld\", \n\t \"ram\":\"0\" \n\t}", 
+                    task_child->pid,task_child->comm,__kuid_val(task_child->real_cred->uid), task_child->state);
+                    
+                }
+                
+
+            }
+        }
+        if (esPadre && conhijos)
+        {
+            seq_printf(archivo, "\n\t\t]\n}\n");
+        }
+        else if (esPadre)
+        {
+            seq_printf(archivo, "]\n}\n");
+        }
+        else
+        {
+            seq_printf(archivo, "},\n");
+        }
+       // seq_printf(archivo, "] \n } ,\n");
+    }    
+    
+    seq_printf(archivo, "]}");
+     
+ 
+    return 0;
+ 
+}
