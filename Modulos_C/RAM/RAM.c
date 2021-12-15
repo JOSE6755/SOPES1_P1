@@ -16,14 +16,19 @@ static int escribir_archivo(struct seq_file *archivo, void*v){
     long total;
     long libre;
     long consumida;
+    long compartida;
+    long buffer;
+    long swap;
     si_meminfo(&info);
     total=info.totalram*info.mem_unit;
     libre=info.freeram*info.mem_unit;
-    consumida=total-libre;
-    seq_printf(archivo,"Lab de SOPES1\n");
-    seq_printf(archivo,"Guatemala Diciembre 2021\n");
-    seq_printf(archivo,"Memoria total:%8li\n",total);
-    seq_printf(archivo,"Memoria consumida:%8li\n",consumida);
+    compartida=info.sharedram*info.mem_unit;
+    buffer=info.bufferram*info.mem_unit;
+    swap=info.freeswap*info.mem_unit;
+    consumida=total-libre-compartida-buffer-swap;
+    
+    seq_printf(archivo,"{\"Total\":\"%8li\",\n",total);
+    seq_printf(archivo,"\"Consumida\":\"%8li\"}\n",consumida);
     
     return 0;
 }

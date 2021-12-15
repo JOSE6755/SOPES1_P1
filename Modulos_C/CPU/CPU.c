@@ -20,10 +20,13 @@ static int escribir_archivo(struct seq_file *archivo, void *v)
 {
     //long total;
     long rss;
+    long mb;
+    long total;
     bool esPadre;
     bool first;
     bool next = true;
     bool conhijos;
+    //total=info.totalram*info.mem_unit;
 
     //seq_printf(archivo, "Lab de SOPES1\n");
     seq_printf(archivo, "{\"root\": [\n");
@@ -31,8 +34,9 @@ static int escribir_archivo(struct seq_file *archivo, void *v)
     {
         first = true;
         if (proceso->mm)
-        {
+        {   
             rss = get_mm_rss(proceso->mm);
+            
             if (next)
             {
                 seq_printf(archivo, "{\"Proceso\":\"%s\",\n\"PID\":\"%d\",\n\"RAM\":\"%ld\",\n\"Usuario\":\"%d\",\n\"Estado\":\"%ld\",\n", proceso->comm, proceso->pid, rss, __kuid_val(proceso->real_cred->uid),proceso->state);

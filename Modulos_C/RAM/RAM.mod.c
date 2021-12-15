@@ -30,8 +30,8 @@ __used __section("__versions") = {
 	{ 0x240be803, "remove_proc_entry" },
 	{ 0xc5850110, "printk" },
 	{ 0xfe5d9eb7, "proc_create" },
-	{ 0x6d289335, "init_task" },
 	{ 0xb32a092d, "seq_printf" },
+	{ 0x40c7247c, "si_meminfo" },
 	{ 0x72db9365, "single_open" },
 	{ 0xbdfb6dbb, "__fentry__" },
 };
@@ -39,4 +39,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "4CC79FDA09E477E4477E08A");
+MODULE_INFO(srcversion, "F775525617AF8207E35F044");

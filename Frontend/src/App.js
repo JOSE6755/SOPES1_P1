@@ -8,26 +8,43 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from "axios"
+import { useEffect, useRef, useState } from 'react';
 
 function App() {
+  const socket = useRef(null)
   const [datos, setDatos] = useState(null)
   const [procesos, setProcesos] = useState(null)
+  const prue = { "Prueba": "Hola" }
   useEffect(() => {
-    axios.get("http://localhost:9101/")
+
+    socket.current = new WebSocket("ws://localhost:9100/")
+
+    socket.current.onopen= () => {
+      socket.current.send(JSON.stringify({"Prueba":"Hola"}))
+    }
+    socket.current.onmessage = (message) => {
+      let aux=JSON.parse(message.data)
+      //let aux=(JSON.parse(message.data.root))
+      setDatos(aux.root)
+      setProcesos(aux.Num_proce)
+    }
+    
+
+
+
+    /*axios.get("http://localhost:9101/")
       .then((response) => {
         console.log(response.data)
-        setDatos(response.data.root)
+        if(datos!=null){
+        setDatos(datos=>[...datos,response.data.root])
+        }else{
+          setDatos(response.data.root)
+        }
         setProcesos(response.data.Num_proce)
-      })
+      })*/
   }, [])
 
-  useEffect(() => {
-    if (datos != null) {
-      console.log("datos:", datos)
-    }
-  }, [datos])
+
 
   return (
     <div>
@@ -132,7 +149,7 @@ function App() {
                     {items.Estado}
                   </td>
                   <td>
-                    {items.RAM}
+                    {items.RAM}%
                   </td>
                 </tr>
               )
