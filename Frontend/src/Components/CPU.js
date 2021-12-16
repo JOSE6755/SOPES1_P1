@@ -14,11 +14,11 @@ function CPU() {
     const socket = useRef(null)
 
     const [datos, setDatos] = useState([])
-    //const [procesos, setProcesos] = useState(null)
+    const [cantidad, setCantidad] = useState({})
     const prueba = { "Prueba": "Hola" }
     useEffect(() => {
 
-        socket.current = new WebSocket("ws://localhost:9101/CPU")
+        socket.current = new WebSocket("ws://localhost:9100/CPU")
 
         socket.current.onopen = () => {
             socket.current.send(JSON.stringify(prueba))
@@ -27,6 +27,7 @@ function CPU() {
             let datitos={name:"cpu",value:parseFloat(message.data)}
             console.log(datitos)
             setDatos(datos=>[...datos,datitos])
+            setCantidad(datitos)
             //setDatos(currentData=>[...currentData,message.data])
             //let aux=(JSON.parse(message.data.root))
             //setDatos(aux.root)
@@ -52,7 +53,7 @@ function CPU() {
 
     return (
         <div>
-            <h1>Porcentaje de uso del CPU</h1>
+            <h1>Porcentaje de uso del CPU: {cantidad.value}</h1>
             {datos ? <LineChart width={500} height={300} data={datos}>
                 <XAxis dataKey="name" />
                 <YAxis />

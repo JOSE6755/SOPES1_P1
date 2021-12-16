@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-//import CPU from './Components/CPU'
+import CPU from './Components/CPU'
 import RAM from './Components/RAM'
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 ReactDOM.render(
-  <React.StrictMode>
-    <RAM/>
-  </React.StrictMode>,
+  
+    <App/>
+
+  ,
   document.getElementById('root')
 );
 

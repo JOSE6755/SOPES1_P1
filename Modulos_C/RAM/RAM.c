@@ -25,7 +25,7 @@ static int escribir_archivo(struct seq_file *archivo, void*v){
     compartida=info.sharedram*info.mem_unit;
     buffer=info.bufferram*info.mem_unit;
     swap=info.freeswap*info.mem_unit;
-    consumida=total-libre-compartida-buffer-swap;
+    consumida=total-libre-compartida-buffer;
     
     seq_printf(archivo,"{\"Total\":\"%8li\",\n",total);
     seq_printf(archivo,"\"Consumida\":\"%8li\"}\n",consumida);
@@ -44,16 +44,16 @@ static struct proc_ops operaciones={
 
 static int _insert(void)
 {
-    proc_create("Modulo de RAM",0,NULL,&operaciones);
-    printk(KERN_INFO "Mensaje al insertar el modulo, Lab SO\n");
+    proc_create("memo_201907131",0,NULL,&operaciones);
+    printk(KERN_INFO "201907131\n");
     
     return 0;
 } 
 
 static void _remove(void)
 {
-    remove_proc_entry("Modulo de RAM",NULL);
-    printk(KERN_INFO "Mensaje al remover el modulo, Lab SO\n");
+    remove_proc_entry("memo_201907131",NULL);
+    printk(KERN_INFO "Sistemas operativos 1\n");
 }
 
 module_init(_insert);

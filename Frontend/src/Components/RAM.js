@@ -14,7 +14,7 @@ function RAM() {
     const socket = useRef(null)
 
     const [datos, setDatos] = useState([])
-    //const [procesos, setProcesos] = useState(null)
+    const [cantidad, setCantidad] = useState([])
     const prueba = { "Prueba": "Hola" }
     useEffect(() => {
 
@@ -28,6 +28,13 @@ function RAM() {
             let datitos={name:"ram",value:parseFloat(aux.ConsumidaP)}
             console.log(datitos)
             setDatos(datos=>[...datos,datitos])
+            let total=parseFloat(aux.Total)
+            total=total/1024
+            let consumida=parseFloat(aux.Consumida)
+            consumida=consumida/1024
+            aux.Total=total.toString()
+            aux.Consumida=consumida.toString()
+            setCantidad(aux)
             //setDatos(currentData=>[...currentData,message.data])
             //let aux=(JSON.parse(message.data.root))
             //setDatos(aux.root)
@@ -53,7 +60,9 @@ function RAM() {
 
     return (
         <div>
-            <h1>Porcentaje de uso del CPU</h1>
+            <h1>Total de memoria: {cantidad.Total}</h1>
+            <h1>Memoria consumida: {cantidad.Consumida}</h1>
+            <h1>Porcentaje de uso de RAM</h1>
             {datos ? <LineChart width={500} height={300} data={datos}>
                 <XAxis dataKey="name" />
                 <YAxis />

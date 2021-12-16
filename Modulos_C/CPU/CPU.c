@@ -134,16 +134,16 @@ static struct proc_ops operaciones = {
 
 static int _insert(void)
 {
-    proc_create("Modulo de CPU", 0, NULL, &operaciones);
-    printk(KERN_INFO "Mensaje al insertar el modulo, Lab SO\n");
+    proc_create("cpu_201907131", 0, NULL, &operaciones);
+    printk(KERN_INFO "Jose Augusto Martinez Villegas\n");
 
     return 0;
 }
 
 static void _remove(void)
 {
-    remove_proc_entry("Modulo de CPU", NULL);
-    printk(KERN_INFO "Mensaje al remover el modulo, Lab SO\n");
+    remove_proc_entry("cpu_201907131", NULL);
+    printk(KERN_INFO "Diciembre 2021\n");
 }
 
 module_init(_insert);

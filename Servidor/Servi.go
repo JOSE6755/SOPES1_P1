@@ -76,7 +76,7 @@ func homepage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("NO se pudo actualizar: %s\n", err.Error())
 		return
 	}
-	out, err := ioutil.ReadFile("/proc/Modulo de RAM")
+	out, err := ioutil.ReadFile("/proc/memo_201907131")
 	if err != nil {
 		log.Fatal(err)
 
@@ -106,7 +106,7 @@ func homepage(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		for {
 			w.Header().Set("Content-Type", "application-json")
-			out, err := ioutil.ReadFile("/proc/Modulo de CPU")
+			out, err := ioutil.ReadFile("/proc/cpu_201907131")
 			if err != nil {
 				log.Fatal(err)
 				break
@@ -252,7 +252,7 @@ func RAM(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		for {
 			w.Header().Set("Content-Type", "application-json")
-			out2, err2 := ioutil.ReadFile("/proc/Modulo de RAM")
+			out2, err2 := ioutil.ReadFile("/proc/memo_201907131")
 			if err2 != nil {
 				fmt.Println(err2.Error())
 			}
